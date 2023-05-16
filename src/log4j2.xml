@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+	<properties>
+		<!-- 以项目目录为根目录，在其中创建 logs目录作为日志目录 -->
+		<property name="LOG_HOME">logs</property>
+	</properties>
+
+	<Appenders>
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout
+				pattern="[%date{yyyy-MM-dd HH:mm:ss.SSS}][%thread][%level][%class][%line]:%message%n" />
+		</Console>
+
+		<RollingRandomAccessFile name="infoLog"
+			fileName="${LOG_HOME}/app.log" filePattern="${LOG_HOME}/info.%d{yyyy-MM-dd}.log.gz"
+			append="true">
+			<PatternLayout
+				pattern="[%date{yyyy-MM-dd HH:mm:ss.SSS}][%thread][%level][%class][%line]:%message%n" />
+			<Filters>
+				<ThresholdFilter level="info" onMatch="ACCEPT"
+					onMismatch="NEUTRAL" />
+			</Filters>
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="1"
+					modulate="true" />
+			</Policies>
+		</RollingRandomAccessFile>
+		<RollingRandomAccessFile name="warnLog"
+			fileName="${LOG_HOME}/warn.log" filePattern="${LOG_HOME}/warn.%d{yyyy-MM-dd}.log.gz"
+			append="true">
+			<Filters>
+				<ThresholdFilter level="error" onMatch="DENY"
+					onMismatch="NEUTRAL" />
+				<ThresholdFilter level="warn" onMatch="ACCEPT"
+					onMismatch="DENY" />
+			</Filters>
+			<PatternLayout
+				pattern="[%date{yyyy-MM-dd HH:mm:ss.SSS}][%thread][%level][%class][%line]:%message%n" />
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="1"
+					modulate="true" />
+			</Policies>
+		</RollingRandomAccessFile>
+		<RollingRandomAccessFile name="errorLog"
+			fileName="${LOG_HOME}/error.log" filePattern="${LOG_HOME}/error.%d{yyyy-MM-dd}.log.gz"
+			append="true">
+			<Filters>
+				<ThresholdFilter level="ERROR" onMatch="ACCEPT"
+					onMismatch="DENY" />
+			</Filters>
+			<PatternLayout
+				pattern="[%date{yyyy-MM-dd HH:mm:ss.SSS}][%thread][%level][%class][%line]:%message%n" />
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="1"
+					modulate="true" />
+			</Policies>
+		</RollingRandomAccessFile>
+
+	</Appenders>
+
+	<Loggers>
+		<!-- 第三方的软件日志级别 -->
+		<logger name="com.ve.mapper" level="debug"
+			additivity="false">
+			<AppenderRef ref="Console" />
+		</logger>
+
+		<!-- 剩余其他的日志级别 -->
+		<Root level="info" includeLocation="true">
+			<AppenderRef ref="infoLog" />
+			<AppenderRef ref="Console" />
+		</Root>
+	</Loggers>
+</Configuration>  
