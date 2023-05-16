@@ -7,4 +7,4 @@
 - Tomcat 8.0
 - MyEclipse 2014
 - JDK 1.7
-- MySQL 5.7；
+- MySQL 5.7
